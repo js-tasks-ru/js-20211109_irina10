@@ -1,8 +1,7 @@
 export default class ColumnChart {
   chartHeight = 50;
-  elementCssClass = ['column-chart'];
 
-  constructor({data = [], label = '', link = '', value = 0, formatHeading} = {}) {
+  constructor({data = [], label = '', link = '', value = 0, formatHeading = (value) => value} = {}) {
     this.data = data;
     this.label = label;
     this.link = link;
@@ -10,7 +9,10 @@ export default class ColumnChart {
     this.formatHeading = formatHeading;
 
     this.element = document.createElement('div');
-    this.element.className = this.renderCssClass();
+    this.element.className = 'column-chart';
+    if (!this.data.length) {
+      this.element.classList.add('column-chart_loading');
+    }
     this.element.style = `--chart-height: ${this.chartHeight}`;
 
     this.renderComponent();
@@ -49,22 +51,6 @@ export default class ColumnChart {
     return linkTag;
   }
 
-  renderCssClass() {
-    if (!this.data.length) {
-      this.elementCssClass.push('column-chart_loading');
-    }
-
-    return this.elementCssClass.join(' ');
-  }
-
-  renderHeaderText() {
-    if (typeof this.formatHeading === 'function') {
-      return this.formatHeading(this.value);
-    } else {
-      return this.value;
-    }
-  }
-
   renderComponent() {
     this.element.innerHTML = `
       <div class="column-chart__title">
@@ -72,7 +58,7 @@ export default class ColumnChart {
         ${this.renderLink()}
       </div>
       <div class="column-chart__container">
-        <div data-element="header" class="column-chart__header">${this.renderHeaderText()}</div>
+        <div data-element="header" class="column-chart__header">${this.formatHeading(this.value)}</div>
         <div data-element="body" class="column-chart__chart">
           ${this.renderCol()}
         </div>
@@ -85,9 +71,11 @@ export default class ColumnChart {
 
   update(data) {
     this.data = data;
+
+    this.element.querySelector('.column-chart__chart').innerHTML = this.renderCol();
   }
 
   destroy() {
-
+    delete this;
   }
 }
