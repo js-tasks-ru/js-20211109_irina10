@@ -31,14 +31,13 @@ export default class ColumnChart {
   }
 
   renderCol() {
-    let html = '';
     const columnProps = this.getColumnProps(this.data);
 
-    for (const prop of columnProps) {
-      html += `<div style="--value: ${prop.value}" data-tooltip="${prop.percent}"></div>`;
-    }
+    const result = columnProps.map(item => {
+      return `<div style="--value: ${item.value}" data-tooltip="${item.percent}"></div>`;
+    });
 
-    return html;
+    return result.join('');
   }
 
   renderLink() {
@@ -71,6 +70,6 @@ export default class ColumnChart {
 
   destroy() {
     this.remove();
-    delete this;
+    //delete this; // (*) вообще изначально не реализовывала метод destroy(), потом после создания пулл-реквеста полазила по остальным решениями и где-то это увидела, решила дописать не разобравшись )) сейчас почитала про использование delete - и тут, конечно, оно выглядит не уместно. Буду рада послушать про реализацию destroy() на занятии.
   }
 }
