@@ -42,13 +42,7 @@ export default class ColumnChart {
   }
 
   renderLink() {
-    let linkTag = '';
-
-    if (this.link.length) {
-      linkTag = `<a href="${this.link}" class="column-chart__link">View all</a>`;
-    }
-
-    return linkTag;
+    return this.link ? `<a href="${this.link}" class="column-chart__link">View all</a>` : '';
   }
 
   renderComponent() {
@@ -76,6 +70,7 @@ export default class ColumnChart {
   }
 
   destroy() {
+    this.remove();
     delete this;
   }
 }
