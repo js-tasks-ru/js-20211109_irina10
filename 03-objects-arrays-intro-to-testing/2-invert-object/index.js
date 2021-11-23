@@ -11,7 +11,7 @@ export function invertObj(obj) {
   const newObj = {};
 
   for (let item of Object.entries(obj)) {
-    let [value, key] = item;
+    const [value, key] = item;
     newObj[key] = value;
   }
 

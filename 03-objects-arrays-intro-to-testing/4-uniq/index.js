@@ -5,7 +5,7 @@
  */
 export function uniq(arr) {
   const uniqSet = new Set(arr);
-  let uniqArr = [];
+  const uniqArr = [];
 
   for (let value of uniqSet) {
     uniqArr.push(value);
