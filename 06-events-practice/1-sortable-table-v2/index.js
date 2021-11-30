@@ -15,7 +15,7 @@ export default class SortableTable {
     this.isSortLocally = isSortLocally;
 
     this.render();
-    this.addEventListenerForHeaderCells();
+    this.addEventListener();
   }
 
   get template() {
@@ -47,11 +47,6 @@ export default class SortableTable {
     const direction = directions[order];
     const sortFieldConfig = this.headerConfig.find(item => item.id === field);
     const sortType = sortFieldConfig ? sortFieldConfig.sortType : 'number';
-
-    const arrowInCell = this.subElements.header.querySelector(`[data-element="arrow"]`);
-    if (arrowInCell) {
-      arrowInCell.remove();
-    }
 
     const orderedCell = this.subElements.header.querySelector(`[data-order]`);
     if (orderedCell) {
@@ -163,17 +158,17 @@ export default class SortableTable {
     this.sort(id, order);
   }
 
-  addEventListenerForHeaderCells() {
-    for (const cell of this.subElements.header.children) {
-      if (cell.dataset.sortable === 'true') {
-        cell.addEventListener('pointerdown', (e) => {
-          const field = cell.dataset.id;
-          const currentOrder = this.subElements.header.querySelector(`[data-order]`);
-          const targetOrder = currentOrder ? this.getTargetOrder(currentOrder.dataset.order) : this.defaultOrder;
+  addEventListener() {
+    this.subElements.header.addEventListener('pointerdown', this.onSortableCellClick);
+  }
 
-          this.sort(field, targetOrder);
-        });
-      }
+  onSortableCellClick = (event) => {
+    if (event.target.closest('[data-sortable]')) {
+      const field = event.target.closest('[data-sortable]').dataset.id;
+      const currentOrder = this.subElements.header.querySelector(`[data-order]`);
+      const targetOrder = currentOrder ? this.getTargetOrder(currentOrder.dataset.order) : this.defaultOrder;
+
+      this.sort(field, targetOrder);
     }
   }
 
