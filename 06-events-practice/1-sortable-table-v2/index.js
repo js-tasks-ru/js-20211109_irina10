@@ -163,7 +163,7 @@ export default class SortableTable {
   }
 
   onSortableCellClick = (event) => {
-    if (event.target.closest('[data-sortable]')) {
+    if (event.target.closest('[data-sortable="true"]')) {
       const field = event.target.closest('[data-sortable]').dataset.id;
       const currentOrder = this.subElements.header.querySelector(`[data-order]`);
       const targetOrder = currentOrder ? this.getTargetOrder(currentOrder.dataset.order) : this.defaultOrder;
@@ -173,12 +173,12 @@ export default class SortableTable {
   }
 
   getTargetOrder(currentOrder) {
-    switch (currentOrder) {
-    case 'asc':
-      return 'desc';
-    case 'desc':
-      return 'asc';
-    }
+    const obj = {
+      asc: 'desc',
+      desc: 'asc'
+    };
+
+    return obj[currentOrder];
   }
 
   destroy() {

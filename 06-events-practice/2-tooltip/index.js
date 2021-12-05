@@ -1,5 +1,4 @@
 class Tooltip {
-  static activeTooltip;
   static instance;
 
   element;
@@ -24,7 +23,6 @@ class Tooltip {
 
   showTooltip(event) {
     this.render(event.target.dataset.tooltip);
-    Tooltip.activeTooltip = this;
 
     event.target.addEventListener('pointermove', this.moveTooltip);
     event.target.addEventListener('pointerout', this.hideTooltip);
@@ -34,14 +32,16 @@ class Tooltip {
     event.target.removeEventListener('pointermove', this.moveTooltip);
     event.target.removeEventListener('pointerout', this.hideTooltip);
 
-    if (Tooltip.activeTooltip) {
-      Tooltip.activeTooltip.destroy();
+    if (Tooltip.instance) {
+      Tooltip.instance.remove();
     }
   }
 
   moveTooltip(event) {
-    Tooltip.activeTooltip.element.style.top = `${event.clientY + 5}px`;
-    Tooltip.activeTooltip.element.style.left = `${event.clientX + 5}px`;
+    const offset = 5;
+
+    Tooltip.instance.element.style.top = `${event.clientY + offset}px`;
+    Tooltip.instance.element.style.left = `${event.clientX + offset}px`;
   }
 
   render(text) {
@@ -52,12 +52,15 @@ class Tooltip {
     document.body.append(this.element);
   }
 
-  destroy() {
+  remove() {
     if (this.element) {
       this.element.remove();
     }
+  }
+
+  destroy() {
+    this.remove();
     this.element = null;
-    Tooltip.activeTooltip = null;
     Tooltip.instance = null;
   }
 }
