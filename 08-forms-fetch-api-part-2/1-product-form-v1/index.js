@@ -23,6 +23,7 @@ export default class ProductForm {
     price: 100,
     discount: 0
   };
+  fileElement;
 
   constructor (productId) {
     this.productId = productId;
@@ -252,16 +253,16 @@ export default class ProductForm {
   onUploadClick = (event) => {
     event.preventDefault();
 
-    const fileElement = document.createElement('input');
-    fileElement.type = 'file';
-    fileElement.accept = 'image/*';
-    fileElement.hidden = true;
+    this.fileElement = document.createElement('input');
+    this.fileElement.type = 'file';
+    this.fileElement.accept = 'image/*';
+    this.fileElement.hidden = true;
 
-    this.element.append(fileElement);
+    this.element.append(this.fileElement);
 
-    fileElement.click();
+    this.fileElement.click();
 
-    fileElement.addEventListener('change', this.onFileChange);
+    this.fileElement.addEventListener('change', this.onFileChange);
   }
 
   onPhotoDeleteClick = (event) => {
@@ -278,6 +279,8 @@ export default class ProductForm {
     const container = document.createElement('div');
     container.innerHTML = this.getImageItem(data.data.link, file.name);
     this.subElements.imageListContainer.firstElementChild.appendChild(container.firstElementChild);
+
+    this.fileElement.remove();
   }
 
   getFromData() {
