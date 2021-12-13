@@ -185,18 +185,15 @@ export default class ProductForm {
 
   fillForm(data) {
     const fields = Object.keys(this.defaultFormData);
-
-    if (!this.productId) {
-      data = this.defaultFormData;
-    }
+    const productData = this.productId ? data : this.defaultFormData;
 
     for (const key of fields) {
-      const value = data[key];
+      const value = productData[key];
       this.subElements.productForm.querySelector(`#${key}`).value = typeof value === 'string' ? unescapeHtml(value) : value;
     }
 
-    if (data.images) {
-      this.subElements.imageListContainer.firstElementChild.innerHTML = this.renderImages(data.images);
+    if (productData.images) {
+      this.subElements.imageListContainer.firstElementChild.innerHTML = this.renderImages(productData.images);
     }
   }
 
